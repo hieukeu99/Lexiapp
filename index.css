@@ -1,0 +1,493 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LEXI — Unified Design System
+   Modern Minimalist English–Vietnamese Dictionary
+   No cards · No shadows · No gradients · No glass · Flat surfaces
+   Typography-first · 8pt grid · Horizontal reading layout
+   ============================================================ */
+
+/* ---------- 1. Design Tokens ---------- */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* surfaces */
+  --bg: #ffffff;
+  --bg-subtle: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --hover: #f3f5f8;
+  --active: #e9edf2;
+
+  /* text */
+  --on-surface: #18191c; /* primary */
+  --on-surface-2: #5c636e; /* secondary — IPA, POS */
+  --on-surface-3: #9099a3; /* tertiary — placeholders, faint icons */
+
+  /* hairlines */
+  --divider: #eceef2;
+  --divider-2: #e2e6ec;
+
+  /* brand */
+  --primary: #1a73e8;
+  --primary-soft: #e8f0fe;
+  --star: #f2a51a;
+
+  /* geometry (8pt grid) */
+  --row-pad-y: 16px; /* comfortable density → ~64px rows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-full: 999px;
+  --nav-h: 80px;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #131517;
+  --bg-subtle: #171a1d;
+  --surface: #181b1e;
+  --surface-2: #1f2329;
+  --hover: #21262c;
+  --active: #262c33;
+
+  --on-surface: #e8eaed;
+  --on-surface-2: #9aa0a8;
+  --on-surface-3: #62686f;
+
+  --divider: #262b31;
+  --divider-2: #2f353c;
+
+  --primary: #93c5fd;
+  --primary-soft: rgba(147, 197, 253, 0.16);
+  --star: #f6b73c;
+
+  color-scheme: dark;
+}
+
+.density-compact {
+  --row-pad-y: 9px; /* compact density → ~52px rows */
+}
+
+/* ---------- 2. Base ---------- */
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--on-surface);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+::selection {
+  background: var(--primary-soft);
+}
+button {
+  font-family: inherit;
+}
+
+/* focus (accessibility) — outline only, never a shadow */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+button:focus {
+  outline: none;
+}
+
+/* scrollbars */
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: var(--divider-2) transparent;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background: var(--divider-2);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background: var(--on-surface-3);
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- 3. Typography (dictionary scale) ---------- */
+.dict-headword {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--on-surface);
+}
+.dict-ipa {
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--on-surface-2);
+}
+.dict-pos {
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--on-surface-2);
+  font-style: italic;
+}
+.dict-meaning {
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--on-surface);
+}
+
+/* ---------- 4. Horizontal table layout ---------- */
+.dict-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+.dict-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg-subtle);
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-surface-3);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider-2);
+  white-space: nowrap;
+}
+.dict-table th:last-child {
+  text-align: right;
+}
+.dict-table td {
+  padding-block: var(--row-pad-y);
+  vertical-align: middle;
+  border-bottom: 1px solid var(--divider);
+}
+
+/* shrink-to-fit columns; Meaning flexes to fill the rest */
+.col-word {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 28px;
+}
+.col-ipa {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 20px;
+}
+.col-pos {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 24px;
+}
+.col-meaning {
+  width: auto;
+  min-width: 0;
+  padding-right: 16px;
+}
+.col-meaning .dict-meaning {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.col-actions {
+  white-space: nowrap;
+  width: 1%;
+  text-align: right;
+}
+
+.word-row {
+  cursor: pointer;
+}
+.word-row:hover td,
+.word-row.is-open td {
+  background: var(--hover);
+}
+
+.detail-row td {
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--divider);
+  padding-block: 14px;
+}
+.detail-row:last-child td {
+  border-bottom: 0;
+}
+
+/* action icon button */
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--on-surface-2);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.icon-btn:hover {
+  background: var(--active);
+  color: var(--on-surface);
+}
+.icon-btn.is-fav {
+  color: var(--star);
+}
+.icon-btn.is-fav:hover {
+  color: var(--star);
+}
+
+/* IPA tap-to-speak */
+.ipa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  cursor: pointer;
+  color: var(--on-surface-2);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease;
+}
+.ipa-btn:hover {
+  color: var(--primary);
+}
+.ipa-btn .spk {
+  width: 15px;
+  height: 15px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.word-row:hover .ipa-btn .spk,
+.ipa-btn:focus-visible .spk {
+  opacity: 1;
+}
+
+/* ---------- 5. Search & filter controls ---------- */
+.search-wrap {
+  position: relative;
+  width: 100%;
+}
+.search-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 40px 0 44px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--divider-2);
+  border-radius: var(--radius-md);
+  color: var(--on-surface);
+  font-size: 16px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.search-input::placeholder {
+  color: var(--on-surface-3);
+}
+.search-input:focus {
+  border-color: var(--primary);
+  background: var(--surface);
+  outline: none;
+}
+
+.chip {
+  height: 32px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--divider-2);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--on-surface-2);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.chip:hover {
+  background: var(--hover);
+  color: var(--on-surface);
+}
+.chip.is-active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: transparent;
+}
+.chip-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* popover menu (border only — no shadow) */
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 40;
+  min-width: 196px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--divider-2);
+  border-radius: var(--radius-md);
+}
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--on-surface);
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+.menu-item:hover {
+  background: var(--hover);
+}
+.menu-item .mi-icon {
+  color: var(--on-surface-2);
+}
+
+/* ---------- 6. Bottom navigation (Material Design 3) ---------- */
+.nav-bar {
+  height: var(--nav-h);
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--divider);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-item {
+  flex: 1 1 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  padding: 8px 0 14px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--on-surface-2);
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-pill {
+  width: 64px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+.nav-item .nav-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+.nav-item.is-active {
+  color: var(--primary);
+}
+.nav-item.is-active .nav-pill {
+  background: var(--primary-soft);
+}
+.nav-item svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- 7. Settings controls ---------- */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--divider-2);
+  border: 0;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.18s ease;
+}
+.switch[data-on="true"] {
+  background: var(--primary);
+}
+.switch[data-on="true"]::after {
+  transform: translateX(18px);
+}
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--on-surface-2);
+  cursor: pointer;
+}
+.seg button.is-on {
+  background: var(--surface);
+  color: var(--on-surface);
+}
+
+/* responsive: collapse the IPA column on very small screens */
+@media (max-width: 560px) {
+  .col-ipa,
+  .th-ipa {
+    display: none;
+  }
+}
